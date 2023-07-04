@@ -40,28 +40,28 @@
         <div class="col-md-5">
             <p class="fonte-destaque">Create New Account</p>
 
-            <form action="" method="POST">
+            <form action="{% url 'create_bank_account' %}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
                 <label>Name</label>
-                <input type="text" name="apelido" class="form-control" placeholder="">
+                <input type="text" name="name" class="form-control" placeholder="">
                 <br>
                 <label>Bank</label>
-                <select name="banco" class="form-select">
+                <select name="bank" class="form-select">
                     <option value="NU">Nubank</option>
                 </select>
                 <br>
                 <label>Type</label>
-                <select name="tipo" class="form-select">
+                <select name="type" class="form-select">
                     <option value="pf">Personal Account</option>
                     <option value="pj">Business Account</option>
                 </select>
                 <br>
-                <label>Value</label>
-                <input type="number" name="valor" class="form-control" placeholder="">
+                <label>Amount</label>
+                <input type="number" name="amount" class="form-control" placeholder="">
                 <br>
-                <input type="file" placeholder="Ícone" name="icone">
+                <input type="file" placeholder="Icon" name="icon" required>
                 <br>
                 <br>
-                <input style="width: 100%" type="submit" class="botao-principal">
+                <input style="width: 100%" type="submit" class="botao-principal" value="Create">
             </form>
         </div>
     </div>
