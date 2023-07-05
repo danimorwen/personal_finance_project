@@ -50,24 +50,25 @@
                 <div class="saldo">
                     <span class="fonte-destaque">Balance</span>
                     <br>
-                    <span class="font-light">$ 1.200,00</span>
+                    <span class="font-light">$ {{total_amount}}</span>
                 </div>
                 <hr class="hr-borda">
                 <span class="fonte-destaque">Accounts</span>
 
                 <div class="div-contas">
+                    {% for account in accounts %}
 
                     <div class="lista-conta">
-                        <span>Bank 1</span>
-                        <span class="total-conta">$ 3.000,00</span>
+                        <span>{{account.name}}</span>
+                        <span class="total-conta">$ {{account.amount}}</span>
                     </div>
                     <br>
-
+                    {% endfor %}
 
 
                 </div>
                 <hr class="hr-borda">
-                <a href="#" class="botao-principal">Account Management</a>
+                <a href="{% url 'management' %}" class="botao-principal">Account Management</a>
             </div>
 
         </div>

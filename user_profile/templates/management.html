@@ -2,8 +2,8 @@
 {% load static %}
 {% block 'head' %}
 
-<link href="{% static 'perfil/css/home.css' %}" rel="stylesheet">
-<link href="{% static 'perfil/css/gerenciar.css' %}" rel="stylesheet">
+<link href="{% static 'user_profile/css/home.css' %}" rel="stylesheet">
+<link href="{% static 'user_profile/css/gerenciar.css' %}" rel="stylesheet">
 
 {% endblock %}
 
@@ -12,27 +12,34 @@
 <br>
 <div class="container">
     <div class="row">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
         <div class="col-md-5">
             <p class="fonte-destaque">Accounts</p>
             <hr>
 
+
             <div class="contas">
 
-
+                {% for account in accounts %}
                 <div class="lista-contas-main">
-                    <span><img width="10%" src="#">&nbsp&nbspBank 1</span>
+                    <span><img width="10%" src="{{account.bank_icon.url}}">&nbsp&nbsp{{account.name}}</span>
 
-                    <span class="total-conta positivo ">$ 1.800,00&nbsp&nbsp&nbsp <a href="#"><img
-                                src="{% static 'perfil/img/exit.png' %}"></a></span>
+                    <span class="total-conta positivo ">$ {{account.amount}}&nbsp&nbsp&nbsp <a
+                            href="/profile/delete_bank_account/{{account.id}}"><img
+                                src="{% static 'user_profile/img/exit.png' %}"></a></span>
                 </div>
                 <br>
 
-
+                {% endfor %}
             </div>
 
             <hr>
             <span class="fonte-destaque">Total:</span>
-            <span class="positivo total-conta font-destaque">$ 1.800,00</span>
+            <span class="positivo total-conta font-destaque">$ {{total_amount}}</span>
         </div>
 
         <div class="col-md-2"></div>
@@ -47,12 +54,14 @@
                 <label>Bank</label>
                 <select name="bank" class="form-select">
                     <option value="NU">Nubank</option>
+                    <option value="HSBC">HSBC</option>
+                    <option value="MONZO">Monzo</option>
                 </select>
                 <br>
                 <label>Type</label>
                 <select name="type" class="form-select">
-                    <option value="pf">Personal Account</option>
-                    <option value="pj">Business Account</option>
+                    <option value="PA">Personal Account</option>
+                    <option value="BA">Business Account</option>
                 </select>
                 <br>
                 <label>Amount</label>
@@ -72,15 +81,15 @@
         <div class="col-md-5">
             <p class="fonte-destaque">Create New Category</p>
 
-            <form action="" method="POST">
+            <form action="{% url 'create_category' %}" method="POST"> {% csrf_token %}
                 <label>Category</label>
-                <input type="text" name="categoria" class="form-control">
+                <input type="text" name="name" class="form-control">
                 <br>
 
-                <input type="checkbox" name="essencial" value="essencial"><label class="positivo">&nbspEssential</label>
+                <input type="checkbox" name="essential" value="essential"><label class="positivo">&nbspEssential</label>
                 <br>
                 <br>
-                <input style="width: 100%" type="submit" class="botao-principal" value="Adicionar">
+                <input style="width: 100%" type="submit" class="botao-principal" value="Create">
             </form>
         </div>
 
@@ -91,16 +100,19 @@
             <span class="fonte-destaque">Categories</span>
             <br>
             <div class="contas">
-
+                {% for category in categories %}
 
                 <div class="lista-contas-main">
-                    <span>Lazer</span>
+                    <span>{{category}}</span>
 
-                    <span class="total-conta"><a href="#"><img src="#"></a></span>
+                    <span class="total-conta"><a href="{% url 'update_category' category.id %}"><img
+                                src="{% if category.essential %}{% static 'user_profile/img/check.png' %}{% else %}{% static 'user_profile/img/exit.png' %}{% endif %}"></a></span>
+
                 </div>
+
                 <br>
 
-
+                {% endfor %}
             </div>
         </div>
     </div>
