@@ -21,7 +21,7 @@
     <div class="row">
 
         <div class="col-md-7">
-            <form action="" method="POST">{% csrf_token %}
+            <form action="{% url 'transactions' %}" method="POST">{% csrf_token %}
                 <div class="row">
                     <div class="col-md">
                         <label>Amount</label>
@@ -51,17 +51,17 @@
                         <label>Account</label>
                         <select name="account" class="form-select">
                             {% for account in accounts %}
-                            <option value="{{category.id}}">{{account}}</option>
+                            <option value="{{account.id}}">{{account}}</option>
                             {% endfor %}
                         </select>
                     </div>
                 </div>
                 <br>
-                <input type="radio" name="tipo" value="E"> <label class="positivo">Income</label>
-                <input type="radio" name="tipo" value="S"> <label class="negativo">Expense</label>
+                <input type="radio" name="type" value="I"> <label class="positivo">Income</label>
+                <input type="radio" name="type" value="E"> <label class="negativo">Expense</label>
                 <br>
                 <br>
-                <input type="submit" style="width:40%;" class="botao-principal">
+                <input type="submit" style="width:40%;" class="botao-principal" value="Add">
 
             </form>
         </div>

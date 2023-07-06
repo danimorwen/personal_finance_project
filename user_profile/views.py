@@ -46,13 +46,23 @@ def create_bank_account(request):
     amount = request.POST.get("amount")
     icon = request.FILES.get("icon")
 
-    if len(name.strip()) == 0 or not amount.isdigit():
-        messages.add_message(request, constants.ERROR, "Invalid Input")
-        return redirect("/profile/management")
+    if len(name.strip()) == 0:
+        messages.add_message(
+            request, constants.ERROR, "Name should hava at least on character"
+        )
 
-    account = Account(name=name, bank=bank, type=type, amount=amount, bank_icon=icon)
-    account.save()
-    messages.add_message(request, constants.SUCCESS, "Account created successfully!")
+    elif not amount.isdigit() or len(amount) == 0:
+        messages.add_message(request, constants.ERROR, "Amount should be a number")
+
+    else:
+        account = Account(
+            name=name, bank=bank, type=type, amount=amount, bank_icon=icon
+        )
+        account.save()
+        messages.add_message(
+            request, constants.SUCCESS, "Account created successfully!"
+        )
+
     return redirect("/profile/management")
 
 
