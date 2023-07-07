@@ -1,0 +1,28 @@
+{% load static %}
+
+<div class="card">
+
+    <table>
+        <tr>
+            <th>Account</th>
+            <th>Category</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+
+        </tr>
+        {% for transaction in transactions %}
+        <tr class="linha">
+            <td width="10%">{{transaction.account}}</td>
+            <td>{{transaction.category}}</td>
+            <td>{{transaction.date}}</td>
+            <td>{{transaction.type}}</td>
+            <td>R$ {{transaction.amount}}</td>
+
+        </tr>
+        {% endfor %}
+
+    </table>
+
+
+</div>

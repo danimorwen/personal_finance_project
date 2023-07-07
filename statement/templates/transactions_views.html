@@ -37,6 +37,12 @@
                 <label>Date Range</label>
                 <select name="date_range" class="form-select">
                     <option>Last 7 days</option>
+                    <option>Last 15 days</option>
+                    <option>Last 3 months</option>
+                    <option>Last 6 months</option>
+                    <option>Last 12 months</option>
+                    <option>Last 3 years</option>
+                    <option>Last 5 years</option>
                 </select>
             </div>
 
@@ -50,7 +56,10 @@
             </div>
     </form>
     <div class="col-md-2">
-        <a href="" class="botao-secundario">Export statement</a>
+        <a href="{% url 'clear_filter' %}" class="botao-secundario">Clear Filter</a>
+    </div>
+    <div class="col-md-2">
+        <a href="{% url 'transactions_export' %}" class="botao-secundario">Export statement</a>
     </div>
 </div>
 <br>

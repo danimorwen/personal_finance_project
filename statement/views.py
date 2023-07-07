@@ -1,24 +1,30 @@
+import os
+
 from datetime import datetime
+from io import BytesIO
+from weasyprint import HTML
 
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.http import FileResponse
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.messages import constants
 from user_profile.models import Account, Category
 from .models import Transactions
+from .utils import get_date
 
 
 def transactions(request):
     if request.method == "GET":
         accounts = Account.objects.all()
         categories = Category.objects.all()
-        return HttpResponse(
-            render(
-                request,
-                "transaction.html",
-                {"accounts": accounts, "categories": categories},
-            )
+        return render(
+            request,
+            "transaction.html",
+            {"accounts": accounts, "categories": categories},
         )
+
     elif request.method == "POST":
         amount = request.POST.get("amount")
         category = request.POST.get("category")
@@ -71,14 +77,13 @@ def transactions(request):
 
 
 def transactions_views(request):
-    # to do: clear filter button
-    # filter date
-    transactions = Transactions.objects.filter(date__month=datetime.now().month)
+    transactions = Transactions.objects.all()
     accounts = Account.objects.all()
     categories = Category.objects.all()
 
     account_get = request.GET.get("account")
     category_get = request.GET.get("category")
+    date_range = request.GET.get("date_range")
 
     if account_get:
         transactions = transactions.filter(account__id=account_get)
@@ -86,14 +91,34 @@ def transactions_views(request):
     if category_get:
         transactions = transactions.filter(category__id=category_get)
 
-    return HttpResponse(
-        render(
-            request,
-            "transactions_views.html",
-            {
-                "transactions": transactions,
-                "accounts": accounts,
-                "categories": categories,
-            },
-        )
+    if date_range:
+        transactions = transactions.filter(date__gte=get_date(date_range))
+
+    if not date_range:
+        transactions = transactions.filter(date__month=datetime.now().month)
+
+    return render(
+        request,
+        "transactions_views.html",
+        {
+            "transactions": transactions,
+            "accounts": accounts,
+            "categories": categories,
+        },
     )
+
+
+def clear_filter(request):
+    return redirect("/statement/transactions_views/")
+
+
+def transactions_export(request):
+    transactions = Transactions.objects.filter(date__month=datetime.now().month)
+    statement_path = os.path.join(
+        settings.BASE_DIR, "templates/partials/statement.html"
+    )
+    rendered_html = render_to_string(statement_path, {"transactions": transactions})
+    output_path = BytesIO()
+    HTML(string=rendered_html).write_pdf(output_path)
+    output_path.seek(0)
+    return FileResponse(output_path, filename="statement.pdf")
