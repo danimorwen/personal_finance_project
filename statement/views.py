@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
@@ -69,7 +71,20 @@ def transactions(request):
 
 
 def transactions_views(request):
-    transactions = Transactions.objects.all()
+    # to do: clear filter button
+    # filter date
+    transactions = Transactions.objects.filter(date__month=datetime.now().month)
+    accounts = Account.objects.all()
+    categories = Category.objects.all()
+
+    account_get = request.GET.get("account")
+    category_get = request.GET.get("category")
+
+    if account_get:
+        transactions = transactions.filter(account__id=account_get)
+
+    if category_get:
+        transactions = transactions.filter(category__id=category_get)
 
     return HttpResponse(
         render(
@@ -77,6 +92,8 @@ def transactions_views(request):
             "transactions_views.html",
             {
                 "transactions": transactions,
+                "accounts": accounts,
+                "categories": categories,
             },
         )
     )
