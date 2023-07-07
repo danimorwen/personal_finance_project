@@ -1,0 +1,62 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block 'head' %}
+
+<link href="{% static 'user_profile/css/home.css' %}" rel="stylesheet">
+<link href="{% static 'user_profile/css/management.css' %}" rel="stylesheet">
+<link href="{% static 'statement/css/transactions_views.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block 'body' %}
+
+<div class="container">
+    <br>
+    <br>
+    <p class="fonte-destaque">Create planning</p>
+
+    <div id="success-alert" class="alert-box hidden">
+        <span>Limit updated!</span>
+    </div>
+    <div class="card">
+
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Action</th>
+            </tr>
+
+            {% for category in categories %}
+            <tr class="linha">
+                <td>{{category}}</td>
+                <td><input id="category-amount-{{category.id}}" type="number" class="form-control" value="{{category.limit}}"></td>
+                <td><button onclick="update_category_limit({{category.id}})" style="width: 100%;"
+                        class="botao-secundario">Save</button></td>
+            </tr>
+            {% endfor %}
+
+
+        </table>
+
+
+    </div>
+</div>
+
+<script>
+    function update_category_limit(id) {
+        amount = document.getElementById('category-amount-'+id).value
+        fetch('/planning/update_category_limit/'+id, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({new_amount: amount})
+        }).then(function(result){
+            return result.json()
+        }).then(function(data) {
+            document.getElementById('success-alert').classList.remove('hidden')
+        })
+    }
+</script>
+
+
+{% endblock %}

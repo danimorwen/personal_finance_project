@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "user_profile",
     "statement",
+    "planning",
 ]
 
 MIDDLEWARE = [

@@ -75,3 +75,14 @@
     width: 50%;
     display: inline;
 }
+
+.alert-box {
+    padding: 15px;
+    border-radius: 10px;
+    background-color: green;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
