@@ -1,0 +1,69 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block 'head' %}
+
+    <link href="{% static 'user_profile/css/home.css' %}" rel="stylesheet">
+    <link href="{% static 'user_profile/css/management.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block 'body' %}
+
+    <div class="container">
+        <br>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <br>
+        <span class="fonte-destaque">Add Invoice</span>
+        <div class="row">
+
+            <div class="col-md-7">
+                <form action="{% url 'add_invoice' %}" method="POST">{% csrf_token %}
+                    <div class="row">
+                        <div class="col-md">
+                            <label>Nome</label>
+                            <input name="name" type="text" class="form-control">
+                        </div>
+
+                        <div class="col-md">
+                            <label>Category</label>
+                            <select name="category" class="form-select">
+                                {% for category in categories %}
+                                    <option value="{{category.id}}">{{category}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <label>Description</label>
+                    <textarea name="description" class="form-control"></textarea>
+                    <br>
+                    <div class="row">
+                        <div class="col-md">
+                            <label>Amount</label>  
+                            <input name="amount" type="number" class="form-control">
+                        </div>
+
+                        <div class="col-md">
+                            <label>Due Date</label>
+                            <input name="due_date" min="1" max="31" type="number" class="form-control">
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <input type="submit" style="width:40%;" class="botao-principal">
+
+                </form>
+            </div>
+
+            <div class="col-md-8">
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
