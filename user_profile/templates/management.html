@@ -85,8 +85,15 @@
             <p class="fonte-destaque">Create New Category</p>
 
             <form action="{% url 'create_category' %}" method="POST"> {% csrf_token %}
-                <label>Category</label>
+                <label>Name</label>
                 <input type="text" name="name" class="form-control">
+                <br>
+                <label>Transaction Type</label>
+                <select name="type" class="form-select">
+                    <option value="E">Only Expenses</option>
+                    <option value="I">Only Income</option>
+                    <option value="ALL">Both Expenses and Income</option>
+                </select>
                 <br>
 
                 <input type="checkbox" name="essential" value="essential"><label class="positivo">&nbspEssential</label>

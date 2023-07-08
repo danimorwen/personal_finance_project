@@ -3,6 +3,7 @@ import json
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 
 from user_profile.models import Category
 
@@ -19,3 +20,9 @@ def update_category_limit(request, id):
     category.limit = new_amount
     category.save()
     return JsonResponse({"response": "success"})
+
+
+def planning_views(request):
+    # income bar
+    categories = Category.objects.filter(Q(type="E") | Q(type="ALL"))
+    return render(request, "planning_views.html", {"categories": categories})

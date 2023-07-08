@@ -8,4 +8,5 @@ urlpatterns = [
         views.update_category_limit,
         name="update_category_limit",
     ),
+    path("planning_views/", views.planning_views, name="planning_views"),
 ]
