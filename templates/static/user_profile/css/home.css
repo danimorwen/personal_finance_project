@@ -86,3 +86,7 @@
 .hidden {
     display: none;
 }
+
+.category-checkbox {
+    margin-top: 10px;
+}

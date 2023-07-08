@@ -32,7 +32,6 @@ def transactions(request):
         date = request.POST.get("date")
         account = request.POST.get("account")
         type = request.POST.get("type")
-        print("Dados recebidos:", amount, category, description, date, account, type)
 
         if amount == "0" or len(amount) == 0:
             messages.add_message(

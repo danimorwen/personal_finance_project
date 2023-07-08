@@ -1,0 +1,113 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block 'head' %}
+
+    <link href="{% static 'user_profile/css/home.css' %}" rel="stylesheet">
+    <link href="{% static 'user_profile/css/management.css' %}" rel="stylesheet">
+    <style>
+        .linha-conta{
+
+            background-color: var(--dark-color);
+            padding: 20px;
+            border-radius: 10px;
+
+        }
+    </style>
+{% endblock %}
+
+{% block 'body' %}
+
+    <div class="container">
+        <br>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <br>
+        <div class="row">
+
+            <div class="col-md-8">
+                <p class="fonte-destaque" style="color: red;">Past Due Invoices</p>
+                <div class="card">
+                    {% if not past_due_invoices %}
+                        <p class="font-light"> No Past Due Invoices</p>
+                    {% else %}
+                        {% for past_due_invoice in past_due_invoices %}
+                            <div class="linha-conta">
+                                <div class="row">
+                                    <div class="col-md text-center">
+                                        {{past_due_invoice.name}}
+                                    </div>
+                                    <div class="col-md text-center">
+                                        {{past_due_invoice.due_date}}
+                                    </div>
+                                    <div class="col-md text-center">
+                                        <a href="#" class="botao-principal">Pay</a>
+                                    </div> 
+                                </div>
+                            </div>
+                       {% endfor %}
+                    {% endif %}
+                </div>
+                <br>
+                <br>
+                <p class="fonte-destaque" style="color: #E96363;">Due Invoices</p>
+                <div class="card">
+                    {% if not due_invoices %}
+                        <p class="font-light"> No Due Invoices</p>
+                    {% else %}
+                        {% for due_invoice in due_invoices%}
+                            <div class="linha-conta">
+                                <div class="row">
+                                    <div class="col-md text-center">
+                                        {{due_invoice.name}}
+                                    </div>
+                                    <div class="col-md text-center">
+                                        {{due_invoice.due_date}}
+                                    </div>
+                                    <div class="col-md text-center">
+                                        <a href="#" class="botao-principal">Pay</a>
+                                    </div> 
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                        
+                    
+                </div>
+                <br>
+                <br>
+                <p class="fonte-destaque">Future Invoices</p>
+                <div class="card">
+                    {% if not future_invoices %}
+                        <p class="font-light"> No Future Invoices</p>
+                    {% else %}
+                        {% for future_invoice in future_invoices %}
+                            <div class="linha-conta">
+                                <div class="row">
+                                    <div class="col-md text-center">
+                                        {{future_invoice.name}}
+                                    </div>
+                                    <div class="col-md text-center">
+                                        {{future_invoice.due_date}}
+                                    </div>
+                                    <div class="col-md text-center">
+                                        <a href="#" class="botao-principal">Pay</a>
+                                    </div> 
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}                                            
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
