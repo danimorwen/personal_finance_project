@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.messages import constants
 from user_profile.models import Category
-from .models import Invoice, PaidInvoice
+from .models import Invoice
+from .repositories.invoices import InvoicesRepository
 
 
 def add_invoice(request):
@@ -32,29 +33,18 @@ def add_invoice(request):
 
 
 def show_invoices(request):
-    present_month = datetime.now().month
-    present_day = datetime.now().day
+    invoices = InvoicesRepository()
 
-    invoices = Invoice.objects.all()
+    all_invoices = invoices.get_all_invoices()
 
-    paid_invoices = PaidInvoice.objects.filter(
-        payment_date__month=present_month
-    ).values("invoice")
+    paid_invoices = invoices.get_paid_invoices()
 
-    past_due_invoices = invoices.filter(due_date__lt=present_day).exclude(
-        id__in=paid_invoices
-    )
+    past_due_invoices = invoices.get_past_due_invoices(all_invoices, paid_invoices)
 
-    due_invoices = (
-        invoices.filter(due_date__lte=present_day + 5)
-        .filter(due_date__gte=present_day)
-        .exclude(id__in=paid_invoices)
-    )
+    due_invoices = invoices.get_due_invoices(all_invoices, paid_invoices)
 
-    future_invoices = (
-        invoices.exclude(id__in=past_due_invoices)
-        .exclude(id__in=paid_invoices)
-        .exclude(id__in=due_invoices)
+    future_invoices = invoices.get_future_invoices(
+        all_invoices, past_due_invoices, paid_invoices, due_invoices
     )
 
     return render(

@@ -3,7 +3,11 @@ from django.db.models import Sum
 
 
 def sum_total(object, field):
-    return object.aggregate(Sum(field))[f"{field}__sum"]
+    total = object.aggregate(Sum(field))[f"{field}__sum"]
+    if total:
+        return total
+    else:
+        return 0
 
 
 def get_total_expenses_by_category(categories, transactions):
@@ -40,3 +44,17 @@ def get_total_expenses_by_category(categories, transactions):
         data[category.name] = value_list
 
     return data
+
+
+def get_expenses_percentage_by_essential(transactions):
+    exp_essentials = sum_total(transactions.filter(category__essential=True), "amount")
+    exp_non_essentials = sum_total(
+        transactions.filter(category__essential=False), "amount"
+    )
+    exp_total = exp_essentials + exp_non_essentials
+    try:
+        essential_percentage = int(exp_essentials / exp_total * 100)
+        non_essential_percentage = int(exp_non_essentials / exp_total * 100)
+        return essential_percentage, non_essential_percentage
+    except ZeroDivisionError:
+        return 0, 0

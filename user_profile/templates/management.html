@@ -3,7 +3,7 @@
 {% block 'head' %}
 
 <link href="{% static 'user_profile/css/home.css' %}" rel="stylesheet">
-<link href="{% static 'user_profile/css/gerenciar.css' %}" rel="stylesheet">
+<link href="{% static 'user_profile/css/management.css' %}" rel="stylesheet">
 
 {% endblock %}
 
@@ -30,7 +30,7 @@
 
                     <span
                         class="{% if account.amount > 0 %} total-conta positivo {% else %} total-conta negativo {% endif %}">$
-                        {{account.amount}}&nbsp&nbsp&nbsp <a href="/profile/delete_bank_account/{{account.id}}"><img
+                        {{account.amount|floatformat:2}}&nbsp&nbsp&nbsp <a href="/profile/delete_bank_account/{{account.id}}"><img
                                 src="{% static 'user_profile/img/exit.png' %}"></a></span>
                 </div>
                 <br>

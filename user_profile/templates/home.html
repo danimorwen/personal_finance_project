@@ -11,11 +11,11 @@
     <br>
     <div class="row">
         <div class="col-md-3">
-            <a style="text-decoration: none; color:white;" href="#">
+            <a style="text-decoration: none; color:white;" href="{% url 'transactions' %}">
                 <div class="card">
                     <div class="row">
                         <div class="col-md-8">
-                            <span class="fonte-destaque">$ 1.000,00</span>
+                            <span class="fonte-destaque">$ {{income|floatformat:2}}</span>
                         </div>
                         <div class="col-md">
                             <img class="icone-setas" src="{% static 'user_profile/img/entradas.png' %}">
@@ -26,11 +26,11 @@
             </a>
         </div>
         <div class="col-md-3">
-            <a style="text-decoration: none; color:white;" href="#">
+            <a style="text-decoration: none; color:white;" href="{% url 'transactions' %}">
                 <div class="card">
                     <div class="row">
                         <div class="col-md-8">
-                            <span class="fonte-destaque">$ 1.000,00</span>
+                            <span class="fonte-destaque">$ {{expenses|floatformat:2}}</span>
                         </div>
                         <div class="col-md">
                             <img class="icone-setas" src="{% static 'user_profile/img/saidas.png' %}">
@@ -50,17 +50,17 @@
                 <div class="saldo">
                     <span class="fonte-destaque">Balance</span>
                     <br>
-                    <span class="font-light">$ {{total_amount}}</span>
+                    <span class="font-light">$ {{total_amount|floatformat:2}}</span>
                 </div>
                 <hr class="hr-borda">
-                <span class="fonte-destaque">Accounts</span>
+                <p class="fonte-destaque">Accounts</p>
 
                 <div class="div-contas">
                     {% for account in accounts %}
 
                     <div class="lista-conta">
                         <span>{{account.name}}</span>
-                        <span class="total-conta">$ {{account.amount}}</span>
+                        <span class="{% if account.amount > 0 %} total-conta positivo {% else %} total-conta negativo {% endif %}">$ {{account.amount|floatformat:2}}</span>
                     </div>
                     <br>
                     {% endfor %}
@@ -80,14 +80,14 @@
                         <div class="saldo">
                             <span class="fonte-destaque">Monthly Balance</span>
                             <br>
-                            <span class="font-light">$ 0.000,00</span>
+                            <span class="font-light">$ {{income|floatformat:2}}</span>
                         </div>
                     </div>
                     <div class="col-md">
                         <div class="despesa">
                             <span class="fonte-destaque">Monthly Expenses</span>
                             <br>
-                            <span class="font-light">$ 0.000,00</span>
+                            <span class="font-light">$ {{expenses|floatformat:2}}</span>
                         </div>
 
                     </div>
@@ -95,9 +95,9 @@
                 </div>
                 <hr class="hr-borda">
                 <span class="fonte-destaque">Total Available</span>
-                <span class="font-light negativo">$ 0.000,00</span>
+                <span class="{% if total_monthly > 0 %} total-conta positivo {% else %} total-conta negativo {% endif %}">$ {{total_monthly|floatformat:2}}</span>
                 <hr class="hr-borda">
-                <a href="#" class="botao-principal">Monthly Finances Management</a>
+                <a href="{% url 'transactions_views'%}" class="botao-principal" style="margin-top: 103px">Monthly Finances Management</a>
             </div>
         </div>
 
@@ -110,7 +110,10 @@
                     <span class="fonte-destaque">Planning</span>
                 </div>
                 <hr class="hr-borda">
-                <a href="#" class="botao-principal">Create Planning</a>
+                <a href="{% url 'planning_views' %}" class="botao-principal" style="margin-top:10px">View Planning</a>
+
+                <hr class="hr-borda">
+                <a href="{% url 'create_planning' %}" class="botao-principal" style="margin-bottom:80px">Create Planning</a>
             </div>
         </div>
         <div class="col-md-8">
@@ -120,18 +123,18 @@
 
                 <p>Essential Expenses</p>
                 <div class="progress">
-                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 20%"
+                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: {{essential_percentage}}%"
                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
                 <br>
                 <p>Non-essential Expenses</p>
                 <div class="progress">
-                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 40%"
+                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: {{non_essential_percentage}}%"
                         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
 
                 <hr class="hr-borda">
-                <a href="#" class="botao-principal">Edit Essential Category</a>
+                <a href="{% url 'management' %}" class="botao-principal">Edit Essential Category</a>
 
             </div>
         </div>
@@ -139,22 +142,29 @@
     <br>
     <div class="row">
         <div class="col-md-4">
+            <div class="card">
+                <div class="saldo">
+                    <span class="fonte-destaque">Statistics</span>
+                </div>
+                <hr class="hr-borda">
+                <a  href="{% url 'dashboard' %}"><img src="{% static 'user_profile/img/dashboard.png' %}" alt="Annual Dashboad" width="380" height="230"></a>
+            </div>
         </div>
 
         <div class="col-md-8">
             <div class="card">
-                <span class="fonte-destaque">Account Management</span>
+                <span class="fonte-destaque">Invoices</span>
                 <hr class="hr-borda">
 
                 <span class="fonte-destaque">Pending Invoices</span>
-                <span class="fonte-light">3 due invoices</span>
+                <span class="fonte-light">{{due_invoices}} due invoice{{ x|pluralize:'s' }}</span>
                 <br>
-                <span class="fonte-destaque negativo">Overdue</span>
-                <span class="fonte-light">0 invoices overdue</span>
+                <span class="fonte-destaque negativo">Past due</span>
+                <span class="fonte-light">{{past_due_invoices}} past due invoice{{ x|pluralize:'s' }}</span>
 
                 <hr class="hr-borda">
 
-                <a href="#" class="botao-principal">See more</a>
+                <a href="{% url 'show_invoices' %}" class="botao-principal">See more</a>
 
             </div>
         </div>

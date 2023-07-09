@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
@@ -6,12 +8,31 @@ from django.db.models import Q
 
 from .models import Account, Category
 from statement.models import Transactions
-from .utils import sum_total, get_total_expenses_by_category
+from invoices.repositories.invoices import InvoicesRepository
+from .utils import (
+    sum_total,
+    get_total_expenses_by_category,
+    get_expenses_percentage_by_essential,
+)
 
 
 def home(request):
     accounts = Account.objects.all()
     total_amount = sum_total(accounts, "amount")
+    transactions = Transactions.objects.filter(date__month=datetime.now().month)
+    income = sum_total(transactions.filter(type="I"), "amount")
+    expenses = sum_total(transactions.filter(type="E"), "amount")
+    (
+        essential_percentage,
+        non_essential_percentage,
+    ) = get_expenses_percentage_by_essential(transactions)
+    invoices = InvoicesRepository()
+    all_invoices = invoices.get_all_invoices()
+    paid_invoices = invoices.get_paid_invoices()
+    past_due_invoices = invoices.get_past_due_invoices(all_invoices, paid_invoices)
+    due_invoices = invoices.get_due_invoices(all_invoices, paid_invoices)
+    total_monthly = income - expenses
+
     return HttpResponse(
         render(
             request,
@@ -19,6 +40,13 @@ def home(request):
             {
                 "accounts": accounts,
                 "total_amount": total_amount,
+                "income": income,
+                "expenses": expenses,
+                "essential_percentage": essential_percentage,
+                "non_essential_percentage": non_essential_percentage,
+                "past_due_invoices": len(past_due_invoices),
+                "due_invoices": len(due_invoices),
+                "total_monthly": total_monthly,
             },
         )
     )
