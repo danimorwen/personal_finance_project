@@ -6,6 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 from user_profile.repositories.user_profile import CategoryRepository
+from statement.repositories.statement import TransactionsRepository
+from user_profile.utils import sum_total
 
 
 def create_planning(request):
@@ -23,6 +25,23 @@ def update_category_limit(request, id):
 
 
 def planning_views(request):
-    # income bar
+    income_limit = CategoryRepository().get_category_by_name("Salary")[0].limit
     categories = CategoryRepository().get_categories_by_expenses()
-    return render(request, "planning_views.html", {"categories": categories})
+    transactions = TransactionsRepository()
+    current_month_transactions = transactions.get_transactions_for_current_month()
+    current_month_expenses = sum_total(
+        transactions.get_filtered_expenses(current_month_transactions), "amount"
+    )
+    available_income = income_limit - current_month_expenses
+    available_income_percentage = int(available_income / income_limit * 100)
+    print(available_income_percentage)
+    return render(
+        request,
+        "planning_views.html",
+        {
+            "categories": categories,
+            "income_limit": income_limit,
+            "available_income": available_income,
+            "available_income_percentage": available_income_percentage,
+        },
+    )

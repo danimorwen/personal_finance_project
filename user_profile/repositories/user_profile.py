@@ -19,3 +19,6 @@ class CategoryRepository:
 
     def get_categories_by_expenses(self):
         return Category.objects.filter(Q(type="E") | Q(type="ALL"))
+
+    def get_category_by_name(self, name):
+        return Category.objects.filter(name=name)
