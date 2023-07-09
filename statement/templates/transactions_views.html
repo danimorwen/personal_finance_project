@@ -79,7 +79,7 @@
         </tr>
         {% for transaction in transactions %}
         <tr class="linha">
-            <td width="10%">{{transaction.account}}</td>
+            <td width="10%"><img width="50%" src="{{transaction.account.bank_icon.url}}"></td>
             <td>{{transaction.category}}</td>
             <td>{{transaction.date}}</td>
             <td>

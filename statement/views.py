@@ -59,7 +59,6 @@ def transactions(request):
             )
             transaction.save()
             account = AccountRepository().get_account_by_id(account)
-            print("type", type)
             if type == "I":
                 account.amount += float(amount)
                 messages.add_message(

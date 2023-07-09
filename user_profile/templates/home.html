@@ -59,7 +59,7 @@
                     {% for account in accounts %}
 
                     <div class="lista-conta">
-                        <span>{{account.name}}</span>
+                        <span><img width="07%" src="{{account.bank_icon.url}}">&nbsp&nbsp{{account.name}}</span>
                         <span class="{% if account.amount > 0 %} total-conta positivo {% else %} total-conta negativo {% endif %}">$ {{account.amount|floatformat:2}}</span>
                     </div>
                     <br>
@@ -97,7 +97,9 @@
                 <span class="fonte-destaque">Total Available</span>
                 <span class="{% if total_monthly > 0 %} total-conta positivo {% else %} total-conta negativo {% endif %}">$ {{total_monthly|floatformat:2}}</span>
                 <hr class="hr-borda">
-                <a href="{% url 'transactions_views'%}" class="botao-principal" style="margin-top: 103px">Monthly Finances Management</a>
+                <a href="{% url 'transactions'%}" class="botao-principal">Add New Transaction</a>
+                <hr class="hr-borda">
+                <a href="{% url 'transactions_views'%}" class="botao-principal" style="margin-bottom: 43px">Statements</a>
             </div>
         </div>
 
@@ -110,10 +112,10 @@
                     <span class="fonte-destaque">Planning</span>
                 </div>
                 <hr class="hr-borda">
-                <a href="{% url 'planning_views' %}" class="botao-principal" style="margin-top:10px">View Planning</a>
+                <a href="{% url 'planning_views' %}" class="botao-principal" style="margin-top:20px">View Planning</a>
 
                 <hr class="hr-borda">
-                <a href="{% url 'create_planning' %}" class="botao-principal" style="margin-bottom:80px">Create Planning</a>
+                <a href="{% url 'create_planning' %}" class="botao-principal" style="margin-bottom:70px">Create Planning</a>
             </div>
         </div>
         <div class="col-md-8">
@@ -147,7 +149,7 @@
                     <span class="fonte-destaque">Statistics</span>
                 </div>
                 <hr class="hr-borda">
-                <a  href="{% url 'dashboard' %}"><img src="{% static 'user_profile/img/dashboard.png' %}" alt="Annual Dashboad" width="380" height="230"></a>
+                <a  href="{% url 'dashboard' %}"><img src="{% static 'user_profile/img/dashboard.png' %}" alt="Annual Dashboad" width="380" height="250" style="margin-bottom: 57px"></a>
             </div>
         </div>
 
@@ -161,7 +163,8 @@
                 <br>
                 <span class="fonte-destaque negativo">Past due</span>
                 <span class="fonte-light">{{past_due_invoices}} past due invoice{{ x|pluralize:'s' }}</span>
-
+                <hr class="hr-borda">
+                <a href="{% url 'add_invoice'%}" class="botao-principal">Add New Invoice</a>
                 <hr class="hr-borda">
 
                 <a href="{% url 'show_invoices' %}" class="botao-principal">See more</a>
