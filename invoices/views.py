@@ -1,14 +1,13 @@
-from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.messages import constants
-from user_profile.models import Category
+from user_profile.repositories.user_profile import CategoryRepository
 from .models import Invoice
 from .repositories.invoices import InvoicesRepository
 
 
 def add_invoice(request):
-    categories = Category.objects.all()
+    categories = CategoryRepository().get_all_categories()
     if request.method == "GET":
         return render(request, "add_invoice.html", {"categories": categories})
     else:

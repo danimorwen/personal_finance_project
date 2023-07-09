@@ -10,15 +10,16 @@ from django.http import FileResponse
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.messages import constants
-from user_profile.models import Account, Category
+from user_profile.repositories.user_profile import AccountRepository, CategoryRepository
 from .models import Transactions
+from statement.repositories.statement import TransactionsRepository
 from .utils import get_date
 
 
 def transactions(request):
     if request.method == "GET":
-        accounts = Account.objects.all()
-        categories = Category.objects.all()
+        accounts = AccountRepository().get_all_accounts()
+        categories = CategoryRepository().get_all_categories()
         return render(
             request,
             "transaction.html",
@@ -57,7 +58,7 @@ def transactions(request):
                 type=type,
             )
             transaction.save()
-            account = Account.objects.get(id=account)
+            account = AccountRepository().get_account_by_id(account)
             print("type", type)
             if type == "I":
                 account.amount += float(amount)
@@ -77,8 +78,8 @@ def transactions(request):
 
 def transactions_views(request):
     transactions = Transactions.objects.all()
-    accounts = Account.objects.all()
-    categories = Category.objects.all()
+    accounts = AccountRepository().get_all_accounts
+    categories = CategoryRepository().get_all_categories()
 
     account_get = request.GET.get("account")
     category_get = request.GET.get("category")
@@ -112,7 +113,7 @@ def clear_filter(request):
 
 
 def transactions_export(request):
-    transactions = Transactions.objects.filter(date__month=datetime.now().month)
+    transactions = TransactionsRepository().get_transactions_for_current_month()
     statement_path = os.path.join(
         settings.BASE_DIR, "templates/partials/statement.html"
     )

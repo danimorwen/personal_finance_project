@@ -1,22 +1,22 @@
 import json
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
 
-from user_profile.models import Category
+
+from user_profile.repositories.user_profile import CategoryRepository
 
 
 def create_planning(request):
-    categories = Category.objects.all()
+    categories = CategoryRepository().get_all_categories()
     return render(request, "create_planning.html", {"categories": categories})
 
 
 @csrf_exempt
 def update_category_limit(request, id):
     new_amount = json.load(request).get("new_amount")
-    category = Category.objects.get(id=id)
+    category = CategoryRepository().get_category_by_id(id)
     category.limit = new_amount
     category.save()
     return JsonResponse({"response": "success"})
@@ -24,5 +24,5 @@ def update_category_limit(request, id):
 
 def planning_views(request):
     # income bar
-    categories = Category.objects.filter(Q(type="E") | Q(type="ALL"))
+    categories = CategoryRepository().get_categories_by_expenses()
     return render(request, "planning_views.html", {"categories": categories})
