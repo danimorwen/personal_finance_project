@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.messages import constants
+from django.db.models import Q
 
 from .models import Account, Category
-from .utils import sum_total
+from statement.models import Transactions
+from .utils import sum_total, get_total_expenses_by_category
 
 
 def home(request):
@@ -93,3 +95,15 @@ def update_category(request, id):
     category.essential = not category.essential
     category.save()
     return redirect("/profile/management")
+
+
+def dashboard(request):
+    categories = Category.objects.filter(Q(type="E") | Q(type="ALL"))
+    transactions = Transactions.objects.filter(type="E")
+    data = get_total_expenses_by_category(categories, transactions)
+
+    return render(
+        request,
+        "dashboard.html",
+        {"expenses_by_category": data},
+    )

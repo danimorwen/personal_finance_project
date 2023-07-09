@@ -1,0 +1,80 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block 'head' %}
+
+    <link href="{% static 'user_profile/css/home.css' %}" rel="stylesheet">
+    <link href="{% static 'user_profile/css/management.css' %}" rel="stylesheet">
+    <link href="{% static 'invoices/css/invoices.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block 'body' %}
+
+    <div class="container">
+        <br>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <div class="row">
+
+            <div class="col-md">
+                <span class="fonte-destaque">Expenses by Category</span>
+
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const ctx = document.getElementById("myChart");
+        const colors = ["#e22029", "#e8862c", "#20a1b5", "#a74f9f", "#f0158e", "#6fcb9f", "#fad35f", "#109e39", "#f76f6b", "#8d9da4"];
+
+        const expenses_by_category = {{expenses_by_category|safe}};
+
+        const datasets = Object.keys(expenses_by_category)
+            .map((category, i) => {
+                return {
+                    label: category,
+                    data: expenses_by_category[category],
+                    lineTension: 0,
+                    fill: false,
+                    borderColor: colors[i]
+                }
+            });
+        
+        new Chart(ctx, {
+            plugins: [{
+                beforeInit(chart) {
+                    const originalFit = chart.legend.fit;
+                    chart.legend.fit = function fit() {
+                        originalFit.bind(chart.legend)();
+                        this.height += 30;
+                    }
+                }
+            }],
+            type: 'line',
+            data: {
+                labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+                datasets,
+            },    
+            options: {
+                layout: {
+                    padding: 20
+                }
+            }
+        });
+    </script>
+
+
+{% endblock %}

@@ -12,4 +12,5 @@ urlpatterns = [
     ),
     path("create_category", views.create_category, name="create_category"),
     path("update_category/<int:id>", views.update_category, name="update_category"),
+    path("dashboard/", views.dashboard, name="dashboard"),
 ]
