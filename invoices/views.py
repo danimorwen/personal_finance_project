@@ -1,8 +1,9 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.messages import constants
 from user_profile.repositories.user_profile import CategoryRepository
-from .models import Invoice
+from .models import Invoice, PaidInvoice
 from .repositories.invoices import InvoicesRepository
 
 
@@ -55,3 +56,10 @@ def show_invoices(request):
             "future_invoices": future_invoices,
         },
     )
+
+
+def update_invoice(request, id):
+    paid_invoice = PaidInvoice(invoice_id=id, payment_date=datetime.now())
+    paid_invoice.save()
+    messages.add_message(request, constants.SUCCESS, "Invoice paid successfully")
+    return redirect("/invoices/show_invoices")

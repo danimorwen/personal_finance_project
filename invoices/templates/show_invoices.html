@@ -44,7 +44,7 @@
                                         {{past_due_invoice.due_date}}
                                     </div>
                                     <div class="col-md text-center">
-                                        <a href="#" class="botao-principal">Pay</a>
+                                        <a href="{% url 'update_invoice' past_due_invoice.id %}" class="botao-principal">Pay</a>
                                     </div> 
                                 </div>
                             </div>
@@ -68,7 +68,7 @@
                                         {{due_invoice.due_date}}
                                     </div>
                                     <div class="col-md text-center">
-                                        <a href="#" class="botao-principal">Pay</a>
+                                        <a href="{% url 'update_invoice' due_invoice.id %}" class="botao-principal">Pay</a>
                                     </div> 
                                 </div>
                             </div>
@@ -94,7 +94,7 @@
                                         {{future_invoice.due_date}}
                                     </div>
                                     <div class="col-md text-center">
-                                        <a href="#" class="botao-principal">Pay</a>
+                                        <a href="{% url 'update_invoice' future_invoice.id %}" class="botao-principal">Pay</a>
                                     </div> 
                                 </div>
                             </div>

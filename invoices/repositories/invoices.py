@@ -32,3 +32,6 @@ class InvoicesRepository:
             .exclude(id__in=paid_invoices)
             .exclude(id__in=due_invoices)
         )
+
+    def get_invoice_by_id(self, id):
+        return Invoice.objects.filter(id=id)

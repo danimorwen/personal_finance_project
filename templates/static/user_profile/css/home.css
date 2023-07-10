@@ -24,6 +24,13 @@
 
 }
 
+.font-bold {
+
+    font-weight: bold;
+    font-size: 20px;
+
+}
+
 .hr-borda {
     color: var(--dark-color);
 }

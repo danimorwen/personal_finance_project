@@ -20,8 +20,8 @@
             <div class="card">
                         <p>Monthly Income Planned</p>
                         <div>
-                        <span style="float: left !important;">$ {{available_income}}</span>
-                        <span style="float: right !important;">$ {{income_limit}}</span>
+                        <span style="float: left !important;">$ {{available_income|floatformat:2}}</span>
+                        <span style="float: right !important;">$ {{income_limit|floatformat:2}}</span>
                         </div>
                         <div class="progress" style="height:30px; border-radius:10px">
                             <div class="{% if available_income_percentage > 50 %} progress-bar bg-success {% elif available_income_percentage > 20 %} progress-bar bg-warning {% else %} progress-bar bg-danger {% endif %}" role="progressbar" style="width: {{available_income_percentage}}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
@@ -40,7 +40,7 @@
                     {% for category in categories %}
                         <p>{{category}}</p>
                         <div>
-                        <span style="float: left !important;">$ {{category.total_spent}}</span>
+                        <span class = "{% if category.total_spent > category.limit %} font-bold negativo {% else %} font-bold {% endif %}" style="float: left !important;">$ {{category.total_spent}}</span>
                         <span style="float: right !important;">$ {{category.limit}}</span>
                         </div>
                         <div class="progress">
